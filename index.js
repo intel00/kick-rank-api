@@ -7,6 +7,7 @@ app.get("/rank/:user/:tag", async (req, res) => {
     try {
         const user = req.params.user
         const tag = req.params.tag
+        console.log("İstek geldi:", user, tag)
 
         const url =
             `https://valorantrank.chat/eu/${user}/${tag}?onlyRank=true&mmrChange=true`
@@ -60,6 +61,8 @@ app.get("/rank/:user/:tag", async (req, res) => {
         res.send(finalText)
     }
     catch (err) {
+        console.log("HATA:")
+        console.log(err)
         res.status(500).send("Hata oluştu")
     }
 })
