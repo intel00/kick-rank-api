@@ -57,7 +57,8 @@ app.get("/rank/:user/:tag", async (req, res) => {
 
         const finalText =
             `${rank} : ${rr} KP | Son Maç: ${lastMatchFormatted} KP`
-
+        
+        console.log("Cevap gitti",rank,rr)
         res.send(finalText)
     }
     catch (err) {
