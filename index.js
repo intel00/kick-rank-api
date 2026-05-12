@@ -2,17 +2,24 @@ const express = require("express")
 const axios = require("axios")
 
 const app = express()
+const cache = {}
 
 app.get("/rank/:user/:tag", async (req, res) => {
     try {
         const user = req.params.user
         const tag = req.params.tag
+        const cacheKey = `${user}-${tag}`
         console.log("İstek geldi:", user, tag)
+        if (cache[cacheKey]) {
+            console.log("Cache'den döndü")
+            return res.send(cache[cacheKey])
+        }
 
         const url =
             `https://valorantrank.chat/eu/${user}/${tag}?onlyRank=true&mmrChange=true`
 
         const response = await axios.get(url)
+        console.log("API'den çekildi")
 
         const text = response.data
 
@@ -55,8 +62,12 @@ app.get("/rank/:user/:tag", async (req, res) => {
                 ? lastMatch
                 : `+${lastMatch}`
 
-        const finalText =
-            `${rank} : ${rr} KP | Son Maç: ${lastMatchFormatted} KP`
+        const finalText =`${rank} : ${rr} KP | Son Maç: ${lastMatchFormatted} KP`
+        
+        cache[cacheKey] = finalText
+        setTimeout(() => {
+            delete cache[cacheKey]
+        }, 30000)
         
         console.log("Cevap gitti",rank,rr)
         res.send(finalText)
