@@ -67,7 +67,7 @@ app.get("/rank/:user/:tag", async (req, res) => {
         cache[cacheKey] = finalText
         setTimeout(() => {
             delete cache[cacheKey]
-        }, 30000)
+        }, 180000)
         
         console.log("Cevap gitti",rank,rr)
         res.send(finalText)
